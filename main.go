@@ -3,7 +3,7 @@
 //
 // usage:
 //
-//     gcvis program [arguments]...
+//	gcvis program [arguments]...
 package main
 
 import (
@@ -81,7 +81,6 @@ func main() {
 				fmt.Fprintf(os.Stderr, parser.Err.Error())
 				os.Exit(1)
 			}
-
 			os.Exit(0)
 		}
 	}

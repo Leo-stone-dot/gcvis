@@ -18,26 +18,27 @@ func runParserWith(line string) *Parser {
 
 func TestParserWithMatchingInputGo16(t *testing.T) {
 	line := "gc 763 @77536.239s 1%: 0.11+2192+0.75 ms clock, 0.92+9269/4379/3243+6.0 ms cpu, 6370->6390->3298 MB, 6533 MB goal, 8 P"
+	line = "gc 111 @11111.751s 5%: 0.033+2119+0.037 ms clock, 0.40+522/6319/16714+0.45 ms cpu, 4509->4509->3844 MB, 4509 MB goal, 0 MB stacks, 0 MB globals, 12 P"
 
 	runParserWith(line)
 
 	expectedGCTrace := &gctrace{
-		Heap1:        6533,
-		ElapsedTime:  77536.239,
-		STWSclock:    0.11,
-		MASclock:     2192,
-		STWMclock:    0.75,
-		STWScpu:      0.92,
-		MASAssistcpu: 9269,
-		MASBGcpu:     4379,
-		MASIdlecpu:   3243,
-		STWMcpu:      6.0,
+		Heap1:        4509,
+		ElapsedTime:  11111.751,
+		STWSclock:    0.033,
+		MASclock:     2119,
+		STWMclock:    0.037,
+		STWScpu:      0.4,
+		MASAssistcpu: 522,
+		MASBGcpu:     6319,
+		MASIdlecpu:   16714,
+		STWMcpu:      0.45,
 	}
 
 	select {
 	case gctrace := <-parser.GcChan:
 		if !reflect.DeepEqual(gctrace, expectedGCTrace) {
-			t.Errorf("Expected gctrace to equal %+v. Got %+v instead.", expectedGCTrace, gctrace)
+			t.Errorf("Expected gctrace to equal %+v.\n Got %+v instead.", expectedGCTrace, gctrace)
 		}
 	case <-time.After(100 * time.Millisecond):
 		t.Fatalf("Execution timed out.")
